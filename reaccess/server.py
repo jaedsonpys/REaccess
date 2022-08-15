@@ -5,10 +5,16 @@ import subprocess
 class Server(object):
     def __init__(
         self,
-        host = 'localhost',
-        port = 2808,
+        host: str = None,
+        port: int = None,
         password: str = None
     ) -> None:
+        if not host:
+            host = 'localhost'
+        
+        if not port:
+            port = 2808
+
         self._password = password
 
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
