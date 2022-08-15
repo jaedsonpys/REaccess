@@ -2,7 +2,13 @@ import socket
 
 
 class Client(object):
-    def __init__(self, host = 'localhost', port = 2808) -> None:
+    def __init__(self, host: str = None, port: int = None) -> None:
+        if not host:
+            host = 'localhost'
+        
+        if not port:
+            port = 2808
+
         address = (host, port)
 
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
