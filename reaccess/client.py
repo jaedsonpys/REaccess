@@ -11,3 +11,8 @@ class Client(object):
     def required_password(self) -> bool:
         connect_info = self._socket.recv(1024)
         return connect_info == 'required_password'
+
+    def check_password(self, password: str) -> bool:
+        self._socket.send(password.encode())
+        result = self._socket.recv(1024)
+        return result == 'logged'
