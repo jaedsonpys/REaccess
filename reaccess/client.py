@@ -25,8 +25,8 @@ class Client(object):
 
     def send_command(self, command: str) -> None:
         self._socket.send(command.encode())
-        result = self._socket.recv(1024)
+        result = self._socket.recv(1024).decode()
 
         while result != 'finish':
             print(result)
-            result = self._socket.recv(1024)
+            result = self._socket.recv(1024).decode()
