@@ -47,5 +47,5 @@ def main():
                     break
 
             while True:
-                cmd = input('reaccess (cmd) >').strip()
+                cmd = input('reaccess (cmd) > ').strip()
                 clientc.send_command(cmd)
