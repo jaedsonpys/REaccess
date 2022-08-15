@@ -1,3 +1,6 @@
+import readline
+import getpass
+
 import argeasy
 
 from . import server
@@ -17,3 +20,16 @@ def main():
 
     parser.add_flag('--host', 'Set the connection host')
     parser.add_flag('--port', 'Set the connection port')
+
+    args = parser.get_args()
+
+    if args.server:
+        password = getpass.getpass('Add password to connection (empty for no password): ')
+
+        if not password:
+            password = None
+
+        master = server.Server(args.host, args.port, password)
+        master.run()
+
+        print('Running server...')
