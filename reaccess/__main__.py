@@ -33,3 +33,19 @@ def main():
         master.run()
 
         print('Running server...')
+    elif args.client:
+        clientc = client.Client(args.host, args.port)
+
+        if clientc.required_password():
+            while True:
+                password = getpass.getpass('Enter the password: ')
+                correct_pw = clientc.check_password(password)
+
+                if not correct_pw:
+                    print('\033[31mIncorrect password. Try again.\033[m')
+                else:
+                    break
+
+            while True:
+                cmd = input('reaccess (cmd) >').strip()
+                clientc.send_command(cmd)
