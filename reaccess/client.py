@@ -16,3 +16,11 @@ class Client(object):
         self._socket.send(password.encode())
         result = self._socket.recv(1024)
         return result == 'logged'
+
+    def send_command(self, command: str) -> None:
+        self._socket.send(command.encode())
+        result = self._socket.recv(1024)
+
+        while result != 'finish':
+            print(result)
+            result = self._socket.recv(1024)
