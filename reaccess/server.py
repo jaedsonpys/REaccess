@@ -3,7 +3,14 @@ import subprocess
 
 
 class Server(object):
-    def __init__(self, host = 'localhost', port = 2808) -> None:
+    def __init__(
+        self,
+        host = 'localhost',
+        port = 2808,
+        password: str = None
+    ) -> None:
+        self._password = password
+
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
