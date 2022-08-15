@@ -30,35 +30,42 @@ class Server(object):
         return data.decode()
 
     def run(self) -> None:
-        client, addr = self._socket.accept()
-
-        if self._password:
-            client.send(b'required_password')
-            
-            while True:
-                password = self._wait_data(client)
-
-                if self._password == password:
-                    client.send(b'logged')
-                    break
-                else:
-                    client.send(b'incorrect')
-        else:
-            client.send(b'logged')
-
         while True:
-            command = self._wait_data(client)
-        
-            process = subprocess.Popen(
-                command,
-                shell=True,
-                universal_newlines=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
+            client, addr = self._socket.accept()
 
-            while process.poll() is None:
-                output = process.stdout.readline()
-                client.send(output.encode())
-            else:
-                client.send(b'finish')
+            try:
+                if self._password:
+                    client.send(b'required_password')
+                    
+                    while True:
+                        password = self._wait_data(client)
+
+                        if self._password == password:
+                            client.send(b'logged')
+                            break
+                        else:
+                            client.send(b'incorrect')
+                else:
+                    client.send(b'logged')
+
+                while True:
+                    command = self._wait_data(client)
+                
+                    process = subprocess.Popen(
+                        command,
+                        shell=True,
+                        universal_newlines=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE
+                    )
+
+                    while process.poll() is None:
+                        output = process.stdout.readline()
+                        client.send(output.encode())
+                    else:
+                        client.send(b'finish')
+            except (BrokenPipeError, OSError):
+                continue
+            except KeyboardInterrupt:
+                self._socket.close()
+                client.close()
