@@ -1,4 +1,5 @@
 import socket
+import subprocess
 
 
 class Server(object):
@@ -10,3 +11,7 @@ class Server(object):
 
         self._socket.bind(address)
         self._socket.listen(1)
+
+    def _wait_data(self) -> str:
+        data = self._socket.recv(1024)
+        return data.decode()
